@@ -6,7 +6,7 @@ import { BrowserRouter, Route } from 'react-router-dom'
 
 import Login from './containers/login'
 import Home from './containers/Home'
-import SignUp from './containers/SignUp'
+import SignUp from './containers/signUp'
 
 import 'bootstrap/dist/css/bootstrap.css';
 import store from './store/store'
@@ -16,9 +16,8 @@ import {loadUser} from './store/actions/authActions'
 
 class App extends Component {
 
-  componentDidMount(){
-    store.dispatch(loadUser())
-  }
+
+
 
   render(){
     return (
@@ -29,7 +28,6 @@ class App extends Component {
               <Route path="/login" exact component={Login}/>
               <Route path="/register" exact component={SignUp} />
               <Route path="/" exact component={Home} />
-  
             </Layout>
           </div>
         </BrowserRouter>

@@ -3,6 +3,7 @@ import React from 'react'
 import Navbar from '../components/UI/Navbar'
 
 const Layout = (props) => {
+    
     return (
         <div>
             <Navbar />

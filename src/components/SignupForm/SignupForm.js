@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 
+import {connect} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 
 import {
@@ -9,12 +10,13 @@ import {
     Button,
   } from 'reactstrap';
 
+import * as actionCreators from '../../store/actions/authActions'
 
 import CustomInput from '../UI/Input/Input'
 
-class LoginForm extends Component {
+class SignupForm extends Component {
     state={
-        loginForm: {
+        signupForm: {
             name: {
                 title:"Name",
                 id: "",
@@ -70,12 +72,11 @@ class LoginForm extends Component {
 
         const formData = {}
 
-        Object.keys(this.state.loginForm).forEach((input)=>{
-            formData[input] = this.state.loginForm[input].value
+        Object.keys(this.state.signupForm).forEach((input)=>{
+            formData[input] = this.state.signupForm[input].value
         })
 
      
-        console.log(this.props)
 
         axios.post('/users', formData)
             .then(res=>{
@@ -84,6 +85,7 @@ class LoginForm extends Component {
                     loading: false,
                     purchasing: false
                 })
+                this.props.onStoreToken(res.data.token, res.data.user)
                 this.props.history.push('/')
             })
             .catch(e=>{
@@ -117,7 +119,7 @@ class LoginForm extends Component {
     }
 
     inputChangeHandler = (event, inputIdentifier) => {
-        const upDatedForm =  {...this.state.loginForm}
+        const upDatedForm =  {...this.state.signupForm}
         const upDatedFormEntry =  {...upDatedForm[inputIdentifier]}
 
         upDatedFormEntry.value = event.target.value
@@ -134,7 +136,7 @@ class LoginForm extends Component {
         
 
         this.setState({
-            loginForm: upDatedForm,
+            signupForm: upDatedForm,
             formIsValid
         })
     
@@ -144,19 +146,19 @@ class LoginForm extends Component {
 
     render(){
 
-        const formFields = Object.keys(this.state.loginForm).map(
+        const formFields = Object.keys(this.state.signupForm).map(
             (inp)=>(
-                <Col key={this.state.loginForm[inp].title}>
+                <Col key={this.state.signupForm[inp].title}>
                     <FormGroup>
-                    <Label>{this.state.loginForm[inp].title}</Label>
+                    <Label>{this.state.signupForm[inp].title}</Label>
                     <CustomInput
-                        type={this.state.loginForm[inp].type}
-                        name={this.state.loginForm[inp].name}
-                        id={this.state.loginForm[inp].id}
-                        placeholder={this.state.loginForm[inp].placeholder}
+                        type={this.state.signupForm[inp].type}
+                        name={this.state.signupForm[inp].name}
+                        id={this.state.signupForm[inp].id}
+                        placeholder={this.state.signupForm[inp].placeholder}
 
-                        invalid={!this.state.loginForm[inp].validity}
-                        touched={this.state.loginForm[inp].touched}
+                        invalid={!this.state.signupForm[inp].validity}
+                        touched={this.state.signupForm[inp].touched}
 
                        
                         changeHandler={(e)=>this.inputChangeHandler(e, inp)}
@@ -171,12 +173,19 @@ class LoginForm extends Component {
             <Container className="App">
                 <h2>Register</h2>
                 <Form className="form">
-                {formFields}
-                <Button onClick={this.submitHandler}>Submit</Button>
+                    {formFields}
+                    <Button onClick={this.submitHandler}>Submit</Button>
                 </Form>
            </Container>
         )
     }
 }
 
-export default withRouter(LoginForm)
+
+const mapDispatchtoProps = dispatch => {
+    return {
+        onStoreToken: (token, user) => dispatch(actionCreators.storeToken(token, user)),
+    }
+}
+
+export default withRouter(connect(null, mapDispatchtoProps)(SignupForm))

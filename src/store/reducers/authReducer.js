@@ -29,7 +29,10 @@ export default (state=initialState, action) => {
                 ...state,
                 isAuthenticated: true,
                 isLoading: false,
-                user: action.payload
+                user: {
+                    ...state.user,
+                    ...action.payload
+                }
             }
 
 

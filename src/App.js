@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Route } from 'react-router-dom'
 
 
-import Login from './containers/Login'
+import Login from './containers/login'
 import Home from './containers/Home'
 import SignUp from './containers/SignUp'
 
